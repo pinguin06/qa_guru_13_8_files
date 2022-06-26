@@ -3,6 +3,8 @@ package guru.qa;
 import com.codeborne.pdftest.PDF;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.xlstest.XLS;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.opencsv.CSVReader;
@@ -10,6 +12,7 @@ import guru.qa.domain.Teacher;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -86,5 +89,18 @@ public class FileParseTest {
         assertThat(jsonObject.getName()).isEqualTo("Dmitrii");
         assertThat(jsonObject.isGoodTeacher()).isEqualTo(true);
         assertThat(jsonObject.getPassport().getNumber()).isEqualTo(1234);
+    }
+
+    @Test
+    void jsonJackson() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try (InputStream is = classLoader.getResourceAsStream("book.json")) {
+            JsonNode jsonNode = objectMapper.readTree(new InputStreamReader(is, UTF_8));
+            assertThat(jsonNode.get("name").asText()).isEqualTo("Book for life");
+            assertThat(jsonNode.get("audio").asBoolean(true)).isEqualTo(true);
+            assertThat(jsonNode.withArray("other").findValue("publisher").asText()).isEqualTo("SweetHome");
+            assertThat(jsonNode.withArray("other").findValue("code").asInt()).isEqualTo(123456);
+        }
+
     }
 }

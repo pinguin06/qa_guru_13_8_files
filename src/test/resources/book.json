@@ -1,0 +1,11 @@
+{
+  "name": "Book for life",
+  "author": "Petrov I.I.",
+  "pages": 702,
+  "audio": true,
+  "other": [ {
+    "publisher": "SweetHome",
+    "genre": "psychology",
+    "code": 123456
+  } ]
+}
