@@ -15,7 +15,7 @@ public class HomeWorkZIP {
 
     @DisplayName("Запись в архив")
     @Test
-    public static void main(String[] args) throws IOException {
+    public void zip() throws Exception {
         //где искать файлы, которые нужно поместить в архив
         String parent = "src/test/resources/filesForZip";
 
