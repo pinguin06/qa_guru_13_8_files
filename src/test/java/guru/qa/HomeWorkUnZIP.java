@@ -22,24 +22,25 @@ public class HomeWorkUnZIP {
     static ClassLoader classLoader = FileParseTest.class.getClassLoader();
 
 
-    @DisplayName("Запись в архив")
+
     @Test
-    public static void main(String[] args) throws IOException, CsvException {
+    public void UunZIP() throws IOException, CsvException {
 
         String parent = "src/test/resources/unZIP";
-        InputStream is = classLoader.getResourceAsStream("output.zip");
-        ZipInputStream zis = new ZipInputStream(is);
-        ZipEntry entry;
-        while ((entry = zis.getNextEntry()) != null) {
-            System.out.println(entry.getName());
-            FileOutputStream fout = new FileOutputStream("src/test/resources/unZIP/" + entry.getName());
-            //распаковка файлов в папку
-            for (int c = zis.read(); c != -1; c = zis.read()) {
-                fout.write(c);
+        try (InputStream is = classLoader.getResourceAsStream("output.zip")) {
+            ZipInputStream zis = new ZipInputStream(is);
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
+                System.out.println(entry.getName());
+                FileOutputStream fout = new FileOutputStream("src/test/resources/unZIP/" + entry.getName());
+                //распаковка файлов в папку
+                for (int c = zis.read(); c != -1; c = zis.read()) {
+                    fout.write(c);
+                }
+                fout.flush();
+                zis.closeEntry();
+                fout.close();
             }
-            fout.flush();
-            zis.closeEntry();
-            fout.close();
         }
         //проверка файлов
         File[] unFiles = new File(parent, "").listFiles();
